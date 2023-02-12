@@ -1,0 +1,151 @@
+.prdc-gallery-animation-element {
+  display: block;
+  position: absolute;
+  z-index: 4;
+  box-sizing: border-box;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-user-drag: none;
+  user-drag: none;
+  touch-action: none;
+}
+
+.prdc-gallery-carousel-wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  width: 100%;
+  height: 100vh;
+  z-index: 99999;
+  pointer-events: none;
+}
+
+.prdc-gallery-carousel {
+  pointer-events: all;
+}
+
+.prdc-gallery-slide {
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-user-drag: none;
+  user-drag: none;
+  touch-action: none;
+}
+
+.prdc-gallery-slide:hover {
+  cursor: grab
+}
+
+.prdc-gallery img:hover {
+  cursor: pointer;
+}
+
+.prdc-gallery-carousel img,
+.prdc-gallery-slide-number {
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-user-drag: none;
+  user-drag: none;
+}
+
+.prdc-gallery-image-slider {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  height: 100vh;
+}
+
+.prdc-gallery-slide img {
+  pointer-events: none;
+}
+
+.prdc-gallery-carousel {
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  width: 100%;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+.prdc-gallery-left-arrow,
+.prdc-gallery-right-arrow {
+  position: absolute;
+  width: 58px;
+  height: 100vh;
+  z-index: 3;
+}
+
+.prdc-gallery-left-arrow {
+  left: 0;
+}
+
+.prdc-gallery-right-arrow {
+  right: 0;
+}
+
+.prdc-gallery-left-arrow:hover,
+.prdc-gallery-right-arrow:hover {
+  cursor: pointer;
+}
+
+.prdc-gallery-image-slider {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  height: 100vh;
+}
+
+.prdc-gallery-close-button {
+  position: absolute;
+  top: 20px;
+  right: 6px;
+  width: 30px;
+  height: 30px;
+  padding: 17px;
+  z-index: 3;
+}
+
+.prdc-gallery-close-button:hover {
+  cursor: pointer;
+}
+
+.prdc-gallery-images-container img {
+  display: block;
+  height: 100%;
+  width: auto;
+  margin: 0 auto;
+  position: absolute;
+}
+
+.prdc-gallery-images-container {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.prdc-gallery-slide {
+  position: relative;
+}
+
+.prdc-gallery img:hover {
+  cursor: pointer;
+}
+
+.prdc-gallery-hidden {
+  display: none !important;
+}
+
+.prdc-gallery-slide-number {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  width: 23px;
+  height: 23px;
+  z-index: 3;
+  font-size: 1.5em;
+  color: white;
+}
