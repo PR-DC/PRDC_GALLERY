@@ -1,8 +1,13 @@
 --------------------
 PRDC_GALLERY
-Responsive JavaScript (jQuery) image gallery and lightbox with swipe gestures
+Responsive JavaScript (jQuery) image gallery and lightbox with swipe gestures.
 --------------------
 
+Release 1.0.1, 15.02.2023.
+
+- Added keyboard events and minor changes
+
+--------------------
 Release 1.0.0, 12.02.2023.
 
 - Initial release

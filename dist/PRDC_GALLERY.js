@@ -4,7 +4,7 @@
  * @author Petar Cosic <pcosic@pr-dc.com> <cpetar112@gmail.com>
  * PR-DC, Republic of Serbia
  * info@pr-dc.com
- * @version 1.0.0
+ * @version 1.0.1
  * --------------------
  * Copyright (C) 2023 PR-DC <info@pr-dc.com>
  *
@@ -60,9 +60,9 @@
 // Global variables that can be change based on user desire
 var PRDC_GALLERY_IMAGE_LOAD_ANIMATION_SPEED = 400; // Image load animation time from gallery to carousel in [ms] (400 ms recomended)
 var PRDC_GALLERY_SLIDE_CHANGE_ANIMATION_SPEED = 200; // Slide change animation time in [ms] (200 ms recomended)
-var PRDC_TIME_INTERVAL = 200 // [ms] How fast untill pointer up event to change the slide -> after this time --on pointer up-- will not change the slide
-var PRDC_DX_INTERVAL = 50 // [px] How far do you need to drag the slide left or right for it to change
-var PRDC_MARGIN_TOP = 100 // [px] How far do you need to drag the slide up or down for it to close
+var PRDC_TIME_INTERVAL = 200; // [ms] How fast untill pointer up event to change the slide -> after this time --on pointer up-- will not change the slide
+var PRDC_DX_INTERVAL = 50; // [px] How far do you need to drag the slide left or right for it to change
+var PRDC_MARGIN_TOP = 100; // [px] How far do you need to drag the slide up or down for it to close
  
 // Global variables 
 var PRDC_GALLERY_NUMBER = 0; // Global gallery counter
@@ -117,6 +117,7 @@ class PRDC_GALLERY_CLASS {
     var new_gallery = new PRDC_CAROUSEL_CLASS(gallery, this.carousel_number, gallery_selector);
     this.galleries.push(new_gallery);
   }
+
 }
 
 /** Class for making a carousel from a gallery  */
@@ -255,47 +256,12 @@ class PRDC_CAROUSEL_CLASS {
     $(this.gallery_element).children('img').each(function() {
       slide_number += 1; // increment slide number for each new gallery image
       var current_slide_number = slide_number;
-      
+
+
       $(this).on('click', function(e) {
-        if(gallery.first_load_flag == true) {
-					$('div[carousel-number="' + gallery.carousel_number + '"] .prdc-gallery-slide').each(function () {
-						$(gallery.images_container).css({'height': gallery.height + "px"});
-						$(this).css({'width': gallery.width + "px"});
-						$(this).css({'height': gallery.height + "px"});
-					});
-          gallery.first_load_flag = false;
-        }
 
-        gallery.current_slide_number = current_slide_number;
-        togglePointerEvents(false);
-        if(gallery.one_img_flag == true) {
-          setImagesContainerMarginLeft(0);
-          setSlideNumberText("1/1");
-        } else {
-          setSlideNumberText();
-        }
-
-        gallery.animation_flag = true;
-
-        if(gallery.one_img_flag == true) { 
-          gallery.current_src = gallery.slide_sources[0];
-        }else{
-          gallery.current_src = gallery.slide_sources[gallery.current_slide_number];
-        }
-
-        gallery.current_thumbnail_image = $(this)[0];
-        var start_position_open = [gallery.current_thumbnail_image.getBoundingClientRect().width, gallery.current_thumbnail_image.getBoundingClientRect().height, gallery.current_thumbnail_image.getBoundingClientRect().top, gallery.current_thumbnail_image.getBoundingClientRect().left];
-
-        $(gallery.animation_element).css({
-          'width': start_position_open[0] + "px",
-          'height': start_position_open[1] + "px",
-          'top': start_position_open[2] + "px",
-          'left': start_position_open[3] + "px"
-        });
-
-        $(gallery.animation_element).attr('src', gallery.current_src);
-        $(gallery.animation_element).removeClass('prdc-gallery-hidden');
-        togglePointerEvents(true, PRDC_GALLERY_IMAGE_LOAD_ANIMATION_SPEED);
+        var img = $(this);
+        openCarousel(img,current_slide_number);
       });
     });
     
@@ -306,10 +272,10 @@ class PRDC_CAROUSEL_CLASS {
         if($(gallery.current_carousel_image).attr('src') == '') {          
           $(gallery.current_carousel_image).attr('src', gallery.current_src);
           $(gallery.current_carousel_image).on('load', function() {
-            imageLoadAnimation()
+            imageLoadAnimation();
           });
         } else {
-          imageLoadAnimation()
+          imageLoadAnimation();
         }
         gallery.animation_flag = false;
       } else {
@@ -327,20 +293,6 @@ class PRDC_CAROUSEL_CLASS {
     $(gallery.right_arrow).on('click', function(e) { 
       e.stopImmediatePropagation(); 
       changeSlide('right');
-    });
-
-    // On window resize and orientation change events update image container and slide sizes
-    window.addEventListener('resize', onResize, true);
-		screen.orientation.addEventListener('change', function() {
-      if(gallery.height != gallery.window_height) {
-        // Already changed
-        onResize();
-      } else {
-        // Wait for change
-        detectOrientationChanged().then(function() {
-          onResize();
-        });
-      }
     });
 
     // Adding events on all slides
@@ -463,7 +415,7 @@ class PRDC_CAROUSEL_CLASS {
             $(gallery.carousel).css({'background-color': 'rgba(0, 0, 0, ' + (0.8 * ((51 - Math.abs(new_margin_top) / 5) / 51)) + ')'});
           }
         }
-    };
+    }
 
     /**
      * dragEnd function
@@ -499,8 +451,8 @@ class PRDC_CAROUSEL_CLASS {
             gallery.start_position_close = [gallery.current_carousel_image.getBoundingClientRect().width, gallery.current_carousel_image.getBoundingClientRect().height, gallery.current_carousel_image.getBoundingClientRect().top, gallery.current_carousel_image.getBoundingClientRect().left];
             closeCarousel();
             setTimeout(function() {
-              $(gallery.images_container).css({'margin-top': '0px'});
-              $(gallery.carousel).css({"background-color": "rgba(0, 0, 0, 0.8"});
+              $(gallery.images_container).css({ 'margin-top': '0px' });
+              $(gallery.carousel).css({ "background-color": "rgba(0, 0, 0, 0.8" });
             }, PRDC_GALLERY_IMAGE_LOAD_ANIMATION_SPEED);
           } else {
             $(gallery.images_container).css({'margin-top': '0px'});
@@ -536,7 +488,7 @@ class PRDC_CAROUSEL_CLASS {
               gallery.current_slide_number = gallery.current_slide_number - 1;
             }
           }
-          $(gallery.images_container).animate({'margin-left': -gallery.current_slide_number * gallery.width + 'px'})
+          $(gallery.images_container).animate({'margin-left': -gallery.current_slide_number * gallery.width + 'px'});
           setSlideNumberText();
         }
       }
@@ -548,11 +500,99 @@ class PRDC_CAROUSEL_CLASS {
     }
 
     /**
-     * closeCarousel function
-     * Close the current carousel 
+     * onOrientationChange function
+     * callback function for changing the orientation of the screen
+    */
+    function onOrientationChange() {
+      if (gallery.height != gallery.window_height) {
+        // Already changed
+        onResize();
+      } else {
+        // Wait for change
+        detectOrientationChanged().then(function () {
+          onResize();
+        });
+      }
+    }
+
+    /**
+     * onKeyDown function
+     * Keydown event callback function
+    */
+    function onKeyDown(e) {
+      e = e || window.event;
+      if ($(gallery.carousel).hasClass('prdc-gallery-hidden') == false) {
+        if (e.code == 'Escape') { // Esc -> close carousel
+          closeCarousel();
+        } else if (e.code == 'ArrowLeft') { // left arrow - > Change slide to left
+          changeSlide('left');
+        } else if (e.code == 'ArrowRight') { // right arrow - > Change slide to right
+          changeSlide('right');
+        } else if (e.code == "Space") {
+          changeSlide('right');
+        }
+      }
+    }
+
+    /**
+     * openCarousel function
+     * Open carousel 
      */
+    function openCarousel(img, current_slide_number) {
+        toggleResizeAndKeyEvents(true);
+       
+				// Load image
+        if(gallery.first_load_flag == true) {
+          onResize();
+          onOrientationChange();
+					$('div[carousel-number="' + gallery.carousel_number + '"] .prdc-gallery-slide').each(function () {
+						$(gallery.images_container).css({'height': gallery.height + "px"});
+						$(this).css({'width': gallery.width + "px"});
+						$(this).css({'height': gallery.height + "px"});
+					});
+          gallery.first_load_flag = false;
+        }
+
+        gallery.current_slide_number = current_slide_number;
+        togglePointerEvents(false);
+        if(gallery.one_img_flag == true) {
+          setImagesContainerMarginLeft(0);
+          setSlideNumberText("1/1");
+        } else {
+          setSlideNumberText();
+        }
+
+        gallery.animation_flag = true;
+
+        if(gallery.one_img_flag == true) { 
+          gallery.current_src = gallery.slide_sources[0];
+        } else {
+          gallery.current_src = gallery.slide_sources[gallery.current_slide_number];
+        }
+
+        gallery.current_thumbnail_image = img[0];
+        var start_position_open = [gallery.current_thumbnail_image.getBoundingClientRect().width, gallery.current_thumbnail_image.getBoundingClientRect().height, gallery.current_thumbnail_image.getBoundingClientRect().top, gallery.current_thumbnail_image.getBoundingClientRect().left];
+
+        $(gallery.animation_element).css({
+          'width': start_position_open[0] + "px",
+          'height': start_position_open[1] + "px",
+          'top': start_position_open[2] + "px",
+          'left': start_position_open[3] + "px"
+        });
+
+        $(gallery.animation_element).attr('src', gallery.current_src);
+        $(gallery.animation_element).removeClass('prdc-gallery-hidden');
+        togglePointerEvents(true, PRDC_GALLERY_IMAGE_LOAD_ANIMATION_SPEED);
+		}
+
+    /**
+     * closeCarousel function
+     * closes the carousel
+    */ 
     function closeCarousel() {
+      toggleResizeAndKeyEvents(false);
       togglePointerEvents(false);
+
       var start_position_close = [gallery.current_carousel_image.getBoundingClientRect().width, gallery.current_carousel_image.getBoundingClientRect().height, gallery.current_carousel_image.getBoundingClientRect().top, gallery.current_carousel_image.getBoundingClientRect().left];
       var end_position_close = [gallery.current_thumbnail_image.getBoundingClientRect().width, gallery.current_thumbnail_image.getBoundingClientRect().height, gallery.current_thumbnail_image.getBoundingClientRect().top, gallery.current_thumbnail_image.getBoundingClientRect().left];
 
@@ -592,8 +632,9 @@ class PRDC_CAROUSEL_CLASS {
      * @param {string} dir - change direction - left / right / ''
      */
     function changeSlide(dir) {
-		 gallery.cycle_left = false;
-		 gallery.cycle_right = false;
+      
+      gallery.cycle_left = false;
+      gallery.cycle_right = false;
 
       if(gallery.one_img_flag == false) { // Slides can only change in the case of multiple images in the gallery
         gallery.change_slide_flag = true;
@@ -605,7 +646,7 @@ class PRDC_CAROUSEL_CLASS {
             gallery.current_slide_number = gallery.current_slide_number - 1;
           } else {
             gallery.change_slide_flag = false;
-            return
+            return;
           }
         } else if(dir == "right") { 
           if(gallery.current_slide_number + 1 < gallery.num_slides - 1) {
@@ -615,7 +656,7 @@ class PRDC_CAROUSEL_CLASS {
             gallery.current_slide_number = gallery.current_slide_number + 1;
           } else {
             gallery.change_slide_flag = false;
-            return
+            return;
           }
         } else { // Change to a position of the image clicked in the gallery 
           setImagesContainerMarginLeft();
@@ -644,7 +685,7 @@ class PRDC_CAROUSEL_CLASS {
                 });
               });
             } else if(gallery.cycle_left == true) {
-              var next_img = getSlide();
+              var first_img = getSlide();
               if(next_img.attr('src') == '') {
                 var src = gallery.slide_sources[gallery.slide_sources.length - 2];
                 next_img.attr('src', src);
@@ -683,7 +724,7 @@ class PRDC_CAROUSEL_CLASS {
               next_img.attr('src', src);
               next_img.on('load', function () {
                 animateImagesContainer(function() {
-                  gallery.change_slide_flag = false
+                  gallery.change_slide_flag = false;
                 });
                 updateSize(next_img[0]);
               });
@@ -742,6 +783,23 @@ class PRDC_CAROUSEL_CLASS {
       }
     }
     
+     /**
+     * toggleResizeAndKeyEvents function
+     * Toggles window resize and keydown events
+     * @param {boolean} flag - true -> events on / flase -> events off
+     */ 
+     function toggleResizeAndKeyEvents(flag){
+       if (flag == true) { // Add events
+         window.addEventListener('resize', onResize, true);
+         screen.orientation.addEventListener('change', onOrientationChange);
+         document.addEventListener('keydown', onKeyDown);
+       } else { // Remove events
+         window.removeEventListener('resize', onResize);
+         screen.orientation.removeEventListener('change', onOrientationChange);
+         document.removeEventListener('keydown', onKeyDown);
+       }
+     }
+
     /**
      * loadImage function
      * Loads image and updates size
@@ -775,7 +833,7 @@ class PRDC_CAROUSEL_CLASS {
     */ 
     function animateImagesContainer(callback) {
       $(gallery.images_container).animate({
-          'margin-left': -gallery.current_slide_number*gallery.width + 'px'
+          'margin-left': -gallery.current_slide_number * gallery.width + 'px'
         }, PRDC_GALLERY_SLIDE_CHANGE_ANIMATION_SPEED,
         function() {
           if(typeof callback == 'function') {
@@ -865,10 +923,10 @@ class PRDC_CAROUSEL_CLASS {
      */ 
     function togglePointerEvents(flag, ms = 300) {
       if(flag == false) {
-        $(gallery.carousel).css({'pointer-events': 'none', 'user-select': 'none' });
+        $(gallery.carousel).css({'pointer-events': 'none', 'user-select': 'none'});
       } else {
         setTimeout(function() { 
-          $(gallery.carousel).css({'pointer-events': 'auto', 'user-select': 'auto' })
+          $(gallery.carousel).css({'pointer-events': 'auto', 'user-select': 'auto'});
         }, ms);
       }
     }
@@ -902,7 +960,7 @@ class PRDC_CAROUSEL_CLASS {
             reject();
           } else {
             window.requestAnimationFrame(function() {
-              checkHeight(i+1, prev_height)
+              checkHeight(i+1, prev_height);
             });
           }
         }
@@ -941,16 +999,17 @@ class PRDC_CAROUSEL_CLASS {
      * @param {boolean} change_flag - a flag for changing the size of the image
      */
     function updateSize(image, change_flag = true) {
+      var new_width, new_height;
       var width = gallery.width;
       var height = gallery.height;
       var aspect_ratio = image.naturalWidth / image.naturalHeight;
 
       if(height * aspect_ratio < width) {
-        var new_width = height * aspect_ratio;
-        var new_height = height;
+        new_width = height * aspect_ratio;
+        new_height = height;
       } else {
-        var new_width = width;
-        var new_height = width / aspect_ratio;
+        new_width = width;
+        new_height = width / aspect_ratio;
       }
 
       var left = (width - new_width) / 2;
